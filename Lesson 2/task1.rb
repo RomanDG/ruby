@@ -14,6 +14,6 @@ months = {
   december: 31
 }
 
-months.each do |k,v|
-  puts "#{k}" if v == 30
+months.each do |month, days|
+  puts "#{month}" if days == 30
 end

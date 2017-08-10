@@ -1,5 +1,5 @@
 
-hash = Hash.new
+hash = {}
 all_sum = 0;
 
 loop do
@@ -9,18 +9,18 @@ loop do
   break if item == "стоп"
 
   print "напишите цену товара: "
-  price = gets.chomp.to_i
+  price = gets.chomp.to_f
 
   print "напишите количество товара: "
-  qty = gets.chomp.to_i
+  qty = gets.chomp.to_f
 
   hash[item.intern] = {price: price, qty: qty}
 end
 
 puts "хеш: #{hash}"
 
-hash.each do |k,v|
-  sum = v[:price] * v[:qty]
+hash.each do |price, qty|
+  sum = price[:price] * qty[:qty]
   all_sum += sum
   puts "итоговая сумма за покупку #{k}: #{sum}"
 end

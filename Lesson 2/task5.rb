@@ -16,6 +16,6 @@ end
 
 number += day
 
-((year % 4 == 0) && (year % 400 == 0)) && number += 1
+number += 1 if ((year % 4 == 0) && (year % 400 == 0))
 
 puts "порядковй номер даты в году: #{number}"

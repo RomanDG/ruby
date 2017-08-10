@@ -1,12 +1,16 @@
 
 mass = []
-num = 0
-
-def fib(num)
-  return num < 3 : 1 ? fib(num-1) + fib(num-2)
-end
+index = 0
 
 loop do
-  num += 1
-  fib(num) > 100 ? break : mass << fib(num)
+  if index < 3
+    mass << 1
+  else
+    mass << mass[index-1] + mass[index-2]
+  end
+
+  if mass[index] > 100
+    mass.delete_at(-1) && break
+  end
+  index += 1
 end
