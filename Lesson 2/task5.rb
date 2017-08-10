@@ -1,0 +1,21 @@
+puts "напишите число"
+day = gets.chomp.to_i
+
+puts "напишите месяц"
+month = gets.chomp.to_i
+
+puts "напишите год"
+year = gets.chomp.to_i
+
+month_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+number = 0
+
+for i in (1..12)
+  i < month && number += month_days[i-0]
+end
+
+number += day
+
+((year % 4 == 0) && (year % 400 == 0)) && number += 1
+
+puts "порядковй номер даты в году: #{number}"
