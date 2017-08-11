@@ -1,16 +1,16 @@
 
-mass = []
+arr = []
 index = 0
 
 loop do
   if index < 3
-    mass << 1
+    arr << 1
   else
-    mass << mass[index-1] + mass[index-2]
+    arr << arr[index-1] + arr[index-2]
   end
 
-  if mass[index] > 100
-    mass.delete_at(-1) && break
+  if arr[index] > 100
+    arr.delete_at(-1) && break
   end
   index += 1
 end

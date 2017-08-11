@@ -16,6 +16,6 @@ end
 
 number += day
 
-number += 1 if ((year % 4 == 0) && (year % 400 == 0))
+number += 1 if ((year % 4 == 0) && (year % 400 == 0) && (year % 100 != 0))
 
-puts "порядковй номер даты в году: #{number}"
+puts "порядковый номер даты в году: #{number}"

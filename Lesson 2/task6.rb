@@ -19,10 +19,10 @@ end
 
 puts "хеш: #{hash}"
 
-hash.each do |price, qty|
-  sum = price[:price] * qty[:qty]
+hash.each do |name, item|
+  sum = item[:price] * item[:qty]
   all_sum += sum
-  puts "итоговая сумма за покупку #{k}: #{sum}"
+  puts "итоговая сумма за покупку #{name}: #{sum}"
 end
 
 puts "итоговая сумма всех покупок: #{all_sum}"
