@@ -1,6 +1,6 @@
-
 class Train
-  attr_accessor :number, :type, :num_wagons, :speed, :route, :current_position
+  attr_reader :speed, :num_wagons, :number, :type, :route, :current_position
+  attr_writer :route, :current_position
 
   def initialize(number, type, num_wagons)
     @number = number
@@ -11,62 +11,59 @@ class Train
     @current_position = nil
   end
 
-  def current_speed
-    speed
+  def speed_up(value)
+    self.speed += value
   end
 
-  def set_speed(value)
-    self.speed = value
+  def speed_down(value)
+    self.speed -= value
+    speed = 0 if speed <=0
   end
 
   def stop_run
     self.speed = 0
   end
 
-  def get_num_wagons
-    num_wagons
-  end
-
   def add_wagon
     self.num_wagons += 1 if speed == 0
   end
 
-  def del_wagon
+  def delete_wagon
     self.num_wagons -= 1 if speed == 0
   end
 
   def set_route(value)
     self.route = value
     self.current_position = 0
+    self.route.stations[current_position].add_train(self)
   end
 
   def go_ahead
-    self.current_position += 1 if current_position < route.get_all_stations.size
+    if current_position < route.stations.size
+      self.route.stations[current_position].delete_train(type, number)
+      self.current_position += 1
+      self.route.stations[current_position].add_train(self)
+    end
   end
 
   def go_back
-    self.current_position -= 1 if current_position >= 1
+    if current_position >= 1
+      self.route.stations[current_position].delete_train(type, number)
+      self.current_position -= 1
+      self.route.stations[current_position].add_train(self)
+    end
   end
 
   def current_station
-    route.get_all_stations.at(current_position)
-    #station.at(current_position)
+    route.stations[current_position]
   end
 
   def next_station
-    if current_position < route.get_all_stations.size
-      route.get_all_stations[current_position + 1]
-    else
-      puts "вы на последней станции: #{route.get_all_stations[current_position]}"
-    end
+    route.stations[current_position + 1]
   end
 
   def prev_station
-    if current_position >= 1
-      route.get_all_stations[current_position - 1]
-    else
-      puts "вы на первой станции: #{route.get_all_stations[current_position]}"
-    end
+    route.stations[current_position - 1]
   end
 
 end
