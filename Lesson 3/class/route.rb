@@ -10,8 +10,8 @@ class Route
   end
 
   def delete_station(name)
-    self.stations.delete_if do |station|
-      station.name == name && stations.index(station) != 0 && stations.index(station) != stations.size-1
-    end
+    index = stations.index { |station| station.name == name }
+    return if index.nil? || index == 0 || index == stations.size - 1
+    stations.delete_at(index)
   end
 end

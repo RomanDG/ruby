@@ -11,13 +11,8 @@ class Train
     @current_position = nil
   end
 
-  def speed_up(value)
-    self.speed += value unless value.negative?  # можно было и так: if value > 0, но увидел что и на этот случай есть метод :)
-  end
-
-  def speed_down(value)
-    self.speed -= value
-    speed = 0 if speed <= 0
+  def change_speed(value)
+    self.speed = [0, self.speed + value].max
   end
 
   def stop_run
@@ -35,7 +30,7 @@ class Train
   def set_route(value)
     self.route = value
     self.current_position = 0
-    self.route.stations[current_position].add_train(self)
+    current_station.add_train(self)
   end
 
   def go_ahead
