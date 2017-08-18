@@ -1,6 +1,6 @@
 class Train
   attr_reader :speed, :num_wagons, :number, :type, :route, :current_position
-  attr_writer :route, :current_position
+  attr_writer :route, :current_position, :speed, :num_wagons
 
   def initialize(number, type, num_wagons)
     @number = number
@@ -12,12 +12,12 @@ class Train
   end
 
   def speed_up(value)
-    self.speed += value
+    self.speed += value unless value.negative?  # можно было и так: if value > 0, но увидел что и на этот случай есть метод :)
   end
 
   def speed_down(value)
     self.speed -= value
-    speed = 0 if speed <=0
+    speed = 0 if speed <= 0
   end
 
   def stop_run
@@ -40,17 +40,17 @@ class Train
 
   def go_ahead
     if current_position < route.stations.size
-      self.route.stations[current_position].delete_train(type, number)
+      current_station.delete_train(type, number)
       self.current_position += 1
-      self.route.stations[current_position].add_train(self)
+      current_station.add_train(self)
     end
   end
 
   def go_back
     if current_position >= 1
-      self.route.stations[current_position].delete_train(type, number)
+      current_station.delete_train(type, number)
       self.current_position -= 1
-      self.route.stations[current_position].add_train(self)
+      current_station.add_train(self)
     end
   end
 
@@ -63,7 +63,6 @@ class Train
   end
 
   def prev_station
-    route.stations[current_position - 1]
+    route.stations[current_position - 1] if current_position > 0
   end
-
 end

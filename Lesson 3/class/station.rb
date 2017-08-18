@@ -1,5 +1,5 @@
 class Station
-  attr_accessor :trains
+  attr_accessor :trains, :name
   
   def initialize(name)
     @name = name
@@ -15,10 +15,6 @@ class Station
     self.trains.delete_if do |train|
       train.type == type && train.number == number
     end
-  end
-
-  def get_all_trains
-    trains
   end
 
   def get_trains_by_type(type)
