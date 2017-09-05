@@ -11,9 +11,9 @@ class Station
     self.trains.push(train)
   end
 
-  def delete_train(type, number)
-    self.trains.delete_if do |train|
-      train.type == type && train.number == number
+  def delete_train(train)
+    self.trains.delete_if do |item|
+      item.type == train.type && item.number == train.number
     end
   end
 

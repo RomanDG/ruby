@@ -1,13 +1,5 @@
 class PassengerTrain < Train
-  def initialize(number, type)
-    super
-  end
-
-  def add_vagon
-    super if type == 'passenger'
-  end
-
-  def delete_vagon
+  def initialize(number, type = 'passenger')
     super
   end
 end

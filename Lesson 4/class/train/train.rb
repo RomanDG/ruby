@@ -1,17 +1,16 @@
 class Train
   # это public магия, так как любой обьект наследуемого класса
   # (пассажирский или грузовой поезд) может испоьзовать их  
-  attr_reader :speed, :vagons, :number, :type, :route, :vagon
-  attr_writer :route, :speed, :vagons, :vagon
+  attr_reader :vagons, :number, :type, :route
+  attr_writer :route, :vagons
 
   def initialize(number, type)
     @number = number
     @type = type
     @vagons = []
     @speed = 0
-    @route = nil
-    @current_position = nil
-    @vagon = nil
+    @route
+    @current_position
   end
 
   # это public метод, так как любой обьект наследуемого класса
@@ -29,7 +28,7 @@ class Train
   # это public метод, так как любой обьект наследуемого класса
   # (пассажирский или грузовой поезд) может добавлять вагон
   def add_vagon(vagon)
-    self.vagons.push(vagon) if speed == 0
+    self.vagons << vagon if speed == 0
   end
 
   # это public метод, так как любой обьект наследуемого класса
@@ -50,7 +49,7 @@ class Train
   # (пассажирский или грузовой поезд) может двигаться на станцию вперед
   def go_ahead
     if current_position < route.stations.size
-      current_station.delete_train(type, number)
+      current_station.delete_train(self)
       @current_position += 1
       current_station.add_train(self)
     end
@@ -60,38 +59,38 @@ class Train
   # (пассажирский или грузовой поезд) может двигаться на станцию назад
   def go_back
     if current_position >= 1
-      current_station.delete_train(type, number)
+      current_station.delete_train(self)
       @current_position -= 1
       current_station.add_train(self)
     end
   end
 
+  # это public метод, так как любой обьект наследуемого класса
+  # (пассажирский или грузовой поезд) может двигаться на станцию назад
+  def current_station
+    route.stations[@current_position]
+  end
+
+  # это public метод, так как любой обьект наследуемого класса
+  # (пассажирский или грузовой поезд) может двигаться на станцию назад
+  def next_station
+    route.stations[@current_position + 1]
+  end
+
+  # это public метод, так как любой обьект наследуемого класса
+  # (пассажирский или грузовой поезд) может двигаться на станцию назад
+  def prev_station
+    route.stations[@current_position - 1] if @current_position > 0
+  end   
+
+protected
+  attr_accessor :speed
 
 private
   # вынесен в private, так как это свойство ( теперь даже 2 метода,
   # благодаря магии ) исключительно данного класса
   attr_accessor :current_position
-
-  # вынесен в private, так как данный метод, используется исключительно
-  # внутри этого класса, другими методами движения вперед и назад для 
-  # получения координат
-  def current_station
-    route.stations[current_position]
-  end
-
-  # вынесен в private, так как данный метод, пока нигде не испотзуется
-  # и мы спрятали его, "от греха подальше" :) . Скорее всего он так же будет
-  # использоваться только внутри класса, как и вышенаписаный метод
-  def next_station
-    route.stations[current_position + 1]
-  end
-
-  # вынесен в private, так как данный метод, пока нигде не испотзуется
-  # и мы спрятали его, "от греха подальше" :) . Скорее всего он так же будет
-  # использоваться только внутри класса, как и вышенаписаный метод
-  def prev_station
-    route.stations[current_position - 1] if current_position > 0
-  end  
+ 
 end
 
 require_relative 'cargo_train'
