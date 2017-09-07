@@ -72,13 +72,10 @@ class App
         case action
         when 1
           create_station
-          next
         when 2
-          show_all_stations
-          next          
+          show_all_stations         
         when 3
-          show_all_trains_on_station
-          next          
+          show_all_trains_on_station          
         when 4
           break
         end
@@ -125,22 +122,16 @@ class App
         case action
         when 1
           create_train
-          next
         when 2
-          add_route_for_train
-          next          
+          add_route_for_train         
         when 3
-          add_vagon_to_train
-          next          
+          add_vagon_to_train          
         when 4
           remove_vagon_from_train
-          next
         when 5
           go_ahead
-          next
         when 6
           go_back
-          next
         when 7
           break
         end
@@ -164,7 +155,14 @@ class App
           puts "выввели пустую строку, попробуйте снова..."
           next
         else
-          @trains.push(Train.new(data[0], data[1]))
+          if data[1] == 'cargo'
+            @trains << CargoTrain.new(data[0])
+          elsif data[1] == 'passenger'
+            @trains << PassengerTrain.new(data[0])
+          else
+            puts "вы ошиблись в названии типа поезда, попробуйте снова"
+            next
+          end
           puts "поезд успешно создан."
           break
         end
@@ -186,9 +184,12 @@ class App
       loop do
         puts "введите тип вагона ( cargo / passenger ):"
         if @trains[train].type == "cargo"
-          @trains[train].add_vagon(CargoVagon.new("cargo"))
+          @trains[train].add_vagon(CargoVagon.new(:cargo))
+        elsif @trains[train].type == "passenger"
+          @trains[train].add_vagon(PassengerVagon.new(:passenger))
         else
-          @trains[train].add_vagon(PassengerVagon.new("passenger"))
+          puts "вы ошиблись в назвинии типа вагона, попробуйте снова"
+          next
         end
         puts "вагон добавлен, для добавления нового вагона введите: [1],
         для возврата в главное меню введите: [exit]"
@@ -248,13 +249,10 @@ class App
         case action
         when 1
           create_route
-          next
         when 2
           add_station
-          next
         when 3
-          remove_station
-          next          
+          remove_station         
         when 4
           break
         end

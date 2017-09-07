@@ -7,10 +7,6 @@ class Train
   def initialize(number, type)
     @number = number
     @type = type
-    @vagons = []
-    @speed = 0
-    @route
-    @current_position
   end
 
   # это public метод, так как любой обьект наследуемого класса
