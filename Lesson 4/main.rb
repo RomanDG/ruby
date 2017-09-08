@@ -139,7 +139,7 @@ class App
     end
 
     def trains_list
-      puts "сиписок поездов:"
+      puts "список поездов:"
       @trains.each_with_index do |train, index|
         puts "[#{index}] - поезд номер #{train.number}, тип поезда: #{train.type}" 
       end
@@ -150,15 +150,15 @@ class App
     def create_train
       loop do
         puts "введите номер и тип поезда ( напр: 12345 cargo / passenger ):"
-        data = gets.chomp.split(" ")
-        if data.empty?
+        number, type = gets.chomp.split(" ")
+        if number.empty? && type.empty?
           puts "выввели пустую строку, попробуйте снова..."
           next
         else
-          if data[1] == 'cargo'
-            @trains << CargoTrain.new(data[0])
-          elsif data[1] == 'passenger'
-            @trains << PassengerTrain.new(data[0])
+          if type == 'cargo'
+            @trains << CargoTrain.new(number)
+          elsif type == 'passenger'
+            @trains << PassengerTrain.new(number)
           else
             puts "вы ошиблись в названии типа поезда, попробуйте снова"
             next
@@ -183,12 +183,13 @@ class App
       train = trains_list
       loop do
         puts "введите тип вагона ( cargo / passenger ):"
-        if @trains[train].type == "cargo"
-          @trains[train].add_vagon(CargoVagon.new(:cargo))
-        elsif @trains[train].type == "passenger"
-          @trains[train].add_vagon(PassengerVagon.new(:passenger))
+        type = gets.chomp.intern
+        if @trains[train].type == type
+          @trains[train].add_vagon(CargoVagon.new)
+        elsif @trains[train].type == type
+          @trains[train].add_vagon(PassengerVagon.new)
         else
-          puts "вы ошиблись в назвинии типа вагона, попробуйте снова"
+          puts "вы ошиблись в названии типа вагона, попробуйте снова"
           next
         end
         puts "вагон добавлен, для добавления нового вагона введите: [1],

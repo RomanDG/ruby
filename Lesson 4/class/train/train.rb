@@ -7,18 +7,19 @@ class Train
   def initialize(number, type)
     @number = number
     @type = type
+    @vagons = []
   end
 
   # это public метод, так как любой обьект наследуемого класса
   # (пассажирский или грузовой поезд) может менять скорость
   def change_speed(value)
-    self.speed = [0, self.speed + value].max
+    @speed = [0, speed + value].max
   end
 
   # это public метод, так как любой обьект наследуемого класса
   # (пассажирский или грузовой поезд) может останавливаться
   def stop_run
-    self.speed = 0
+    @speed = 0
   end
 
   # это public метод, так как любой обьект наследуемого класса
@@ -80,7 +81,7 @@ class Train
   end   
 
 protected
-  attr_accessor :speed
+  attr_reader :speed
 
 private
   # вынесен в private, так как это свойство ( теперь даже 2 метода,
