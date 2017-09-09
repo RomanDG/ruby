@@ -1,7 +1,7 @@
 class Train
   # это public магия, так как любой обьект наследуемого класса
   # (пассажирский или грузовой поезд) может испоьзовать их  
-  attr_reader :vagons, :number, :type, :route
+  attr_reader :vagons, :number, :type, :route, :speed
   attr_writer :route, :vagons
 
   def initialize(number, type)
@@ -78,10 +78,7 @@ class Train
   # (пассажирский или грузовой поезд) может двигаться на станцию назад
   def prev_station
     route.stations[@current_position - 1] if @current_position > 0
-  end   
-
-protected
-  attr_reader :speed
+  end  
 
 private
   # вынесен в private, так как это свойство ( теперь даже 2 метода,
