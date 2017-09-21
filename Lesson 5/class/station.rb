@@ -2,7 +2,7 @@ class Station
   @@stations = []
 
   def self.all
-    puts @@stations
+    @@stations
   end
 
   # здесь я оставил все в public так как используется обьектами из вне
@@ -11,7 +11,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
-    @@stations << name
+    @@stations << self
   end
 
   def add_train(train)  

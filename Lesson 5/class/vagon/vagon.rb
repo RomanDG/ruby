@@ -2,6 +2,7 @@ require_relative '../../modules/production_company'
 
 class Vagon
   include ProductionCompany
+  
   attr_reader :type
   def initialize(type)
     @type = type

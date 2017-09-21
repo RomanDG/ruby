@@ -5,28 +5,20 @@ module InstanceCounter
   end
 
   module ClassMethods
-    @@instances = 0
-    def instances(is_new = false)
-      if is_new == true
-        @@instances += 1
-      else
-        @@instances
-      end
+    @instances = 0
+    def instances
+      @instances ||= 0
+    end
+
+    def increment_instances
+      @instances += 1
     end
   end
 
   module InstanceMethods
     protected
     def register_instance
-      self.class.instances(true)
+      self.class.increment_instances
     end
   end
 end
-
-# условие:
-# register_instance, который увеличивает счетчик кол-ва экземпляров класса 
-# и который можно вызвать из конструктора. При этом данный метод не должен 
-# быть публичным
-
-# если я не буду делать проверку: if is_new == true, то будет показывать
-# на 1 экземпляр больше

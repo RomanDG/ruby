@@ -3,15 +3,8 @@ require_relative '../../modules/production_company'
 class Train
   @@trains = []
 
-  def self.add(hash)
-    @@trains << hash
-  end
-
   def self.find(num)
-    result = @@trains.select do |item|
-      item[:number] == num
-    end
-    result != [] ? result[0][:obj_train] : nil
+    @@trains.find { |item| item.number == num }
   end
 
   include ProductionCompany
@@ -24,7 +17,7 @@ class Train
     @number = number
     @type = type
     @vagons = []
-    self.class.add({number: num, obj_train: self})
+    @@trains << self
   end
 
   # это public метод, так как любой обьект наследуемого класса
