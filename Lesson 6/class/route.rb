@@ -9,6 +9,7 @@ class Route
 
   def valid?
     validate!
+    true
   rescue
     false
   end
@@ -28,6 +29,5 @@ class Route
   def validate!
     raise "первый параметр для создания маршрута не является обьектом класса Station" if !stations[0].instance_of?(Station)
     raise "второй параметр для создания маршрута не является обьектом класса Station" if !stations[-1].instance_of?(Station)
-    true
   end  
 end

@@ -9,21 +9,18 @@ class Station
   # здесь я оставил все в public так как используется обьектами из вне
   attr_accessor :trains, :name
 
-  LANG_STATION_NAME = /^[а-яА-ЯёЁ\s]+$/
+  NAME_FORMAT = /^[а-яА-ЯёЁ\s]+$/
   
   def initialize(name)
     @name = name
     @trains = []
-    @@stations << self
     validate!
+    @@stations << self
   end
 
-  # не совсем понятно для чего нужен метод, "valid?", и для чего он должен возвращать: true false
-  # если при инициализации идет проверка данных и выбрасывается исключение, котрое по задумке должно
-  # обрабатываться в main.rb. какой смысл? может быть я чего то не понимаю из-за того что этот метод 
-  # будет задействован в будущем. пока не ясно. а может и я вообще не так понял задание :)
   def valid?
     validate!
+    true
   rescue
     false
   end
@@ -45,8 +42,7 @@ class Station
   protected
 
   def validate!
-    raise "название станции содержит латинские буквы" if name !~ LANG_STATION_NAME
-    raise "название станции содержит больше двух слов" if name.split.size > 2
-    true
+    raise "название станции содержит латинские буквы" if name !~ NAME_FORMAT
+    raise "название станции не должно иметь разделяющих пробелов" if name.split.size > 2
   end
 end

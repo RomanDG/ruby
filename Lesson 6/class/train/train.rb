@@ -13,18 +13,19 @@ class Train
   attr_reader :vagons, :number, :type, :route, :speed
   attr_writer :route, :vagons
 
-  NUM_OF_TRAIN = /^[a-z]{2}\-\d{3}$/i
+  NUMBER_FORMAT = /^[a-z]{2}\-\d{3}$/i
 
   def initialize(number, type)
     @number = number
     @type = type
     @vagons = []
-    @@trains << self
     validate!
+    @@trains << self
   end
 
   def valid?
     validate!
+    true
   rescue
     false
   end
@@ -102,8 +103,7 @@ class Train
 protected
 
   def validate!
-    raise "вы ввели не правильный номер поезда" if number !~ NUM_OF_TRAIN
-    true
+    raise "вы ввели не правильный номер поезда" if number !~ NUMBER_FORMAT
   end  
 
 private
