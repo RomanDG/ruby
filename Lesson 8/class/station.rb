@@ -26,22 +26,22 @@ class Station
         Тип поезда:\t#{train.type}
         К-во вагонов:\t#{train.num_of_vagons}
 
-        #{info_of_vagons(train).each{|value| value}}
+        #{info_of_vagons(train)}
       }
     end
     trains.each{|train| _trains(train, &block)}
   end
 
   def info_of_vagons(train)
-    train.vagons.map.with_index do |vagon, index|
-      if vagon.type == "passenger"
-        ratio = "#{vagon.get_free_places} / #{vagon.get_not_free_places}"
-      elsif vagon.type == "cargo"
-        ratio = "#{vagon.get_free_volume} / #{vagon.get_not_free_volume}"
+    arr = train.vagons.map.with_index do |vagon, index|
+      if vagon.type == "passenger".intern
+        ratio = "#{vagon.get_not_free_places} / #{vagon.get_not_free_places + vagon.get_free_places}"
+      elsif vagon.type == "cargo".intern
+        ratio = "#{vagon.get_get_not_free_volume} / #{vagon.get_not_free_volume + vagon.get_free_volume}"
       end
 
       %{
-        * Информация о вагонах:
+        * Информация о вагоне:
           Номер вагона: #{index+1}
           Тип вагона: #{vagon.type}
           Своб. место: #{ratio}
