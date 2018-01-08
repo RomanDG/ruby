@@ -166,11 +166,11 @@ class App
         if @trains[train].type == "cargo".intern
           puts "введите обьем:"
           volume = gets.chomp.to_i          
-          @trains[train].vagons[vagon_number-1].take_volume(volume)
+          @trains[train].vagons[vagon_number].take_volume(volume)
         elsif @trains[train].type == "passenger".intern
           puts "введите количество:"
           places = gets.chomp.to_i
-          @trains[train].vagons[vagon_number-1].add_place(places)
+          @trains[train].vagons[vagon_number].take_place(places)
         end
 
         puts "увеличено / занято, для повтора нажмите: [1],

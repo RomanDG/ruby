@@ -20,6 +20,7 @@ class Train
     @type = type
     @vagons = []
     @num_of_vagons = 0
+    @speed = 0
     validate!
     @@trains[number.to_sym] = self
   end

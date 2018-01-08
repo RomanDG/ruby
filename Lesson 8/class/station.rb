@@ -35,9 +35,9 @@ class Station
   def info_of_vagons(train)
     train.vagons.map.with_index do |vagon, index|
       if vagon.type == "passenger"
-        ratio = "#{get_free_places} / #{get_not_free_places}"
+        ratio = "#{vagon.get_free_places} / #{vagon.get_not_free_places}"
       elsif vagon.type == "cargo"
-        ratio = "#{get_free_volume} / #{get_not_free_volume}"
+        ratio = "#{vagon.get_free_volume} / #{vagon.get_not_free_volume}"
       end
 
       %{
