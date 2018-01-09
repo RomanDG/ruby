@@ -89,7 +89,35 @@ class App
     def show_full_info
       @stations.each do |station|
         puts "Станция #{station.name}:"
-        station.show_trains
+
+        station.show_trains(station.trains) do |trains|
+          trains.each do |train|
+            puts %{
+              Номер поезда:\t#{train.number}
+              Тип поезда:\t#{train.type}
+              К-во вагонов:\t#{train.num_of_vagons}
+
+            }
+
+            train.show_vagons(train.vagons) do |vagons|
+              vagons.map.with_index do |vagon, index|
+                if vagon.type == "passenger".intern
+                  ratio = "#{vagon.get_not_free_places} / #{vagon.get_not_free_places + vagon.free_places}"
+                elsif vagon.type == "cargo".intern
+                  ratio = "#{vagon.get_get_not_free_volume} / #{vagon.get_not_free_volume + vagon.free_volume}"
+                end
+
+                puts %{
+                  * Информация о вагоне:
+                    Номер вагона: #{index+1}
+                    Тип вагона: #{vagon.type}
+                    Своб. место: #{ratio}
+                }
+              end
+            end
+          end          
+        end
+
         puts "----------"
       end
     end

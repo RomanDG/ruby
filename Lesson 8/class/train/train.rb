@@ -26,10 +26,8 @@ class Train
   end
 
   # метод, который принимает блок и проходит по всем вагонам поезда
-  def show_vagons()
-    vagons.each do |vagon|
-      _vagons(vagon){|vgn| puts vgn}
-    end
+  def show_vagons(vagons, &block)
+    yield(vagons)
   end
 
   def valid?
@@ -121,10 +119,6 @@ private
   # вынесен в private, так как это свойство ( теперь даже 2 метода,
   # благодаря магии ) исключительно данного класса
   attr_accessor :current_position
-
-  def _vagons(v, &block)
-    yield(v)
-  end
  
 end
 
