@@ -1,16 +1,14 @@
 class CargoVagon < Vagon
+  attr_accessor :free_volume
+
   def initialize(volume)
     super(:cargo)
-    self.all_volume = volume
-    self.free_volume = volume
+    @all_volume = volume
+    @free_volume = volume
   end
 
   def take_volume(vol)
     self.free_volume -= vol if self.all_volume > 0
-  end
-
-  def get_free_volume
-    self.free_volume
   end
 
   def get_not_free_volume
@@ -18,5 +16,5 @@ class CargoVagon < Vagon
   end
 
   protected
-    attr_accessor :all_volume, :free_volume
+    attr_accessor :all_volume
 end

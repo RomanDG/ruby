@@ -20,24 +20,25 @@ class Station
 
   # метод, который принимает блок и проходит по всем поездам на станции
   def show_trains()
-    block = ->(train) do
-      puts %{
-        Номер поезда:\t#{train.number}
-        Тип поезда:\t#{train.type}
-        К-во вагонов:\t#{train.num_of_vagons}
+    trains.each do |train|
+      _trains(train) do |train|
+        puts %{
+          Номер поезда:\t#{train.number}
+          Тип поезда:\t#{train.type}
+          К-во вагонов:\t#{train.num_of_vagons}
 
-        #{info_of_vagons(train)}
-      }
+          #{info_of_vagons(train)}
+        }
+      end
     end
-    trains.each{|train| _trains(train, &block)}
   end
 
   def info_of_vagons(train)
     arr = train.vagons.map.with_index do |vagon, index|
       if vagon.type == "passenger".intern
-        ratio = "#{vagon.get_not_free_places} / #{vagon.get_not_free_places + vagon.get_free_places}"
+        ratio = "#{vagon.get_not_free_places} / #{vagon.get_not_free_places + vagon.free_places}"
       elsif vagon.type == "cargo".intern
-        ratio = "#{vagon.get_get_not_free_volume} / #{vagon.get_not_free_volume + vagon.get_free_volume}"
+        ratio = "#{vagon.get_get_not_free_volume} / #{vagon.get_not_free_volume + vagon.free_volume}"
       end
 
       %{
@@ -79,7 +80,7 @@ class Station
 
   private
 
-  def _trains(t)
+  def _trains(t, &block)
     yield(t)
   end
 end
