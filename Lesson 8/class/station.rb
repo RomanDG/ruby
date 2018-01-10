@@ -19,7 +19,7 @@ class Station
   end
 
   # метод, который принимает блок и проходит по всем поездам на станции
-  def show_trains(trains, &block)
+  def show_trains(&block)
     yield(trains)
   end
 

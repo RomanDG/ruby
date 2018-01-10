@@ -26,7 +26,7 @@ class Train
   end
 
   # метод, который принимает блок и проходит по всем вагонам поезда
-  def show_vagons(vagons, &block)
+  def show_vagons(&block)
     yield(vagons)
   end
 

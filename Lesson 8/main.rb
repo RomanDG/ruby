@@ -90,7 +90,7 @@ class App
       @stations.each do |station|
         puts "Станция #{station.name}:"
 
-        station.show_trains(station.trains) do |trains|
+        station.show_trains do |trains|
           trains.each do |train|
             puts %{
               Номер поезда:\t#{train.number}
@@ -99,7 +99,7 @@ class App
 
             }
 
-            train.show_vagons(train.vagons) do |vagons|
+            train.show_vagons do |vagons|
               vagons.map.with_index do |vagon, index|
                 if vagon.type == "passenger".intern
                   ratio = "#{vagon.get_not_free_places} / #{vagon.get_not_free_places + vagon.free_places}"
