@@ -27,7 +27,9 @@ class Train
 
   # метод, который принимает блок и проходит по всем вагонам поезда
   def show_vagons(&block)
-    yield(vagons)
+    vagons.map.with_index do |vagon, index|
+      yield(vagon, index)
+    end
   end
 
   def valid?

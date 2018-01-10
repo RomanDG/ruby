@@ -20,7 +20,9 @@ class Station
 
   # метод, который принимает блок и проходит по всем поездам на станции
   def show_trains(&block)
-    yield(trains)
+    trains.each do |train|
+      yield(train)
+    end
   end
 
   def valid?
