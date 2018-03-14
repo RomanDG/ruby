@@ -1,0 +1,30 @@
+
+Metrics/ClassLength:
+  Max: 50
+
+Metrics/MethodLength:
+  Max: 50
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 150
+
+Style/AsciiComments:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
+Lint/UselessAssignment:
+  Enabled: false
