@@ -1,48 +1,58 @@
-# модуль Accessors
 module Accessors
-    @@var_history = {}
+  def self.included(base)
+    base.extend ClassMethods
+  end
 
+  module ClassMethods
     def attr_accessor_with_history(*args)
-        args.each do |attr_name|
-            @@var_history["#{attr_name}".to_sym] = []
+      args.each do |attr|
+        define_method("#{attr}".to_sym){ instance_eval("@#{attr}") }
 
-            define_method(attr_name){ instance_variable_get("@#{attr_name}".to_sym) }
-    
-            define_method("#{attr_name}=".intern) do |value|
-                instance_variable_set("@#{attr_name}".to_sym, value)
-                @@var_history["#{attr_name}".to_sym] << value
-                puts @@var_history
-            end
-            
-            # убрать puts и inspect, это нужно только для тестов
-            define_method("#{attr_name}_history".intern){ puts @@var_history["#{attr_name}".intern].inspect }
+        define_method("#{attr}=".to_sym) do |value|
+          instance_variable_set("@#{attr}".to_sym, value)
+          tmp = []
+          unless instance_variable_defined?("@#{attr}_history".to_sym)
+            tmp << instance_eval("@#{attr}")
+            instance_variable_set("@#{attr}_history".to_sym, tmp)
+          else
+            tmp = instance_eval("@#{attr}_history")
+            tmp << instance_eval("@#{attr}")
+            instance_variable_set("@#{attr}_history".to_sym, tmp)
+          end
+          tmp = []
         end
+      end
     end
 
-    def strong_attr_acessor(*attr_name)
-        define_method(attr_name[0]){ instance_variable_get("@#{attr_name[0]}".to_sym) }
-    
-        define_method("#{attr_name[0]}=".intern) do |value|
-            raise "different types" if value[0].class.to_s != value[1].to_s
-            instance_variable_set("@#{attr_name[0]}".to_sym, value)
-        end
+    def strong_attr_accessor(*args)
+      define_method(args[0]){ instance_eval("@#{args[0]}") }
+          
+      define_method("#{args[0]}=".to_sym) do |value|
+        raise "different types" if value.class.to_s != args[1].to_s
+        instance_variable_set("@#{args[0]}".to_sym, value)
+      end
     end
+  end
 end
 
-# проверочный класс для модуля
 class Test
-    extend Accessors
-    attr_accessor_with_history :name, :age
-    strong_attr_acessor :number
-
-    def initialize
-    end
+  include Accessors
+  attr_accessor_with_history :name, :age
+  
+  strong_attr_accessor :name, String
+  strong_attr_accessor :age, Integer
 end
 
-# тесты работы
 t = Test.new
-t.name = "AAA"
-t.name = "BBB"
-t.name_history
-t.number = 100, :Integer
-puts t.number.inspect
+t.name = "AAAAA"
+t.name = "BBBBB"
+t.age = 29
+t.age = 31
+
+t2 = Test.new
+t2.name = "CCCCC"
+t2.name = "DDDDD"
+
+puts t.instance_variable_get(:@name_history).inspect
+puts t.instance_variable_get(:@age_history).inspect
+puts t2.instance_variable_get(:@name_history).inspect
