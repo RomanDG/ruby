@@ -4,12 +4,14 @@ module Validation
     base.send :include, InstanceMethods
   end
 
+  # т.е. если я правильно понял, валидации теперь будут вызываться так ( например ):
+  # создали станцию - a ( обьект класса Station ), вызываем - a.valid?
+  # и тут у нас уже проверяются все правила валидации для конкретного обьекта
   module ClassMethods
-    class_variable_set(:@@tmp_var, [])
     def validate(*args)
-      args.each { |val| @@tmp_var << val }
-      valid?
-      @@tmp_var = []
+      instance_variable_set("@#{args[0]}".to_sym, [])
+      args.each { |val| instance_eval("@#{args[0]}") << val }
+      #valid?
     end
   end
 
@@ -24,20 +26,24 @@ module Validation
     protected
 
     def validate!
-      firs_arg = @@tmp_var[0]
-      attr_name = self.instance_variable_get("@#{firs_arg}".to_sym)
-      case @@tmp_var[1]
-      when :presence
-        raise 'данный аттрибут не инициализирован' if attr_name == nil || attr_name == ""
-      when :format
-        if self.class = Train
-          raise 'вы ввели не правильный номер поезда' if attr_name !~ @@tmp_var[2]
-        elsif self.class = Station
-          raise 'название станции содержит латинские буквы' if attr_name !~ @@tmp_var[2]
-        end
-      when :type
-          rais 'несоответствие типа' if attr_name.to_s != @@tmp_var[2]
+      self.class.instance_variables.each do |value|
+        @attr_name = self.class.instance_eval("@#{value}")[0]
+        @validator = self.class.instance_eval("@#{value}")[1]
+        @rules = self.class.instance_eval("@#{value}")[2] if self.class.instance_eval("@#{value}")[2] != nil
+        self.send("#{@validator}".to_sym)
       end
+    end
+
+    def presence
+      raise 'данный аттрибут не инициализирован' if @attr_name == nil || @attr_name == ""
+    end
+
+    def format
+      raise 'несоответствие шаблону регулярного выражения' if @attr_name !~ @rules
+    end
+
+    def type
+      rais 'несоответствие типа' if @attr_name.to_s != @rules
     end
   end
 end

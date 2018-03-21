@@ -15,7 +15,7 @@ class Station
   attr_accessor :trains, :name
 
   validate :name, :presence
-  validate :name, :format, NUMBER_FORMAT
+  validate :name, :format, NAME_FORMAT
 
   def initialize(name)
     @name = name
