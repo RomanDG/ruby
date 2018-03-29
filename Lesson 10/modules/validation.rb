@@ -4,14 +4,11 @@ module Validation
     base.send :include, InstanceMethods
   end
 
-  # т.е. если я правильно понял, валидации теперь будут вызываться так ( например ):
-  # создали станцию - a ( обьект класса Station ), вызываем - a.valid?
-  # и тут у нас уже проверяются все правила валидации для конкретного обьекта
   module ClassMethods
+    attr_accessor :validations
     def validate(*args)
-      instance_variable_set("@#{args[0]}".to_sym, [])
-      args.each { |val| instance_eval("@#{args[0]}") << val }
-      #valid?
+      self.validations = [] unless self.validations.is_a?(Array)
+      self.validations << args
     end
   end
 
@@ -26,10 +23,10 @@ module Validation
     protected
 
     def validate!
-      self.class.instance_variables.each do |value|
-        @attr_name = self.class.instance_eval("@#{value}")[0]
-        @validator = self.class.instance_eval("@#{value}")[1]
-        @rules = self.class.instance_eval("@#{value}")[2] if self.class.instance_eval("@#{value}")[2] != nil
+      self.class.validations.each do |value|
+        @attr_name = value[0]
+        @validator = value[1]
+        @rules = value[2] if value[2] != nil
         self.send("#{@validator}".to_sym)
       end
     end
@@ -47,3 +44,25 @@ module Validation
     end
   end
 end
+
+# это небольшой класс для тестирования модуля
+# но у меня почему то регулярка всегда выдает FALSE
+# я никак не моуг разобраться, прошу вашей помощи
+#
+# class Test
+#   include Validation
+
+#   NAME_FORMAT = "/^[а-яА-ЯёЁ\\s]+$/"
+
+#   attr_accessor :name
+
+#   validate :name, :presence
+#   validate :name, :format, NAME_FORMAT
+# end
+
+# t = Test.new
+# t.name = "банан"
+# t.valid?
+# t2 = Test.new
+# t2.name = "banana"
+# t2.valid?
