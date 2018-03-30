@@ -7,7 +7,7 @@ module Validation
   module ClassMethods
     attr_accessor :validations
     def validate(*args)
-      self.validations = [] unless self.validations.is_a?(Array)
+      self.validations ||= []
       self.validations << args
     end
   end
@@ -24,45 +24,43 @@ module Validation
 
     def validate!
       self.class.validations.each do |value|
-        @attr_name = value[0]
-        @validator = value[1]
-        @rules = value[2] if value[2] != nil
-        self.send("#{@validator}".to_sym)
+        self.send("#{value[1]}".to_sym, instance_eval("@#{value[0]}"), value[2])
       end
     end
 
-    def presence
-      raise 'данный аттрибут не инициализирован' if @attr_name == nil || @attr_name == ""
+    def presence(*value)
+      attr_name = value
+      raise 'данный аттрибут не инициализирован' if attr_name == nil || attr_name == ""
     end
 
-    def format
-      raise 'несоответствие шаблону регулярного выражения' if @attr_name !~ @rules
+    def format(*value)
+      attr_name, rules = value
+      raise 'несоответствие шаблону регулярного выражения' if attr_name !~ /#{rules}/
     end
 
-    def type
-      rais 'несоответствие типа' if @attr_name.to_s != @rules
+    def type(*value)
+      attr_name, rules = value
+      rais 'несоответствие типа' if attr_name.to_s != /#{rules}/
     end
   end
 end
 
 # это небольшой класс для тестирования модуля
-# но у меня почему то регулярка всегда выдает FALSE
-# я никак не моуг разобраться, прошу вашей помощи
-#
-# class Test
-#   include Validation
 
-#   NAME_FORMAT = "/^[а-яА-ЯёЁ\\s]+$/"
+class Test
+  include Validation
 
-#   attr_accessor :name
+  NAME_FORMAT = /^[а-яА-ЯёЁ\\s]+$/
 
-#   validate :name, :presence
-#   validate :name, :format, NAME_FORMAT
-# end
+  attr_accessor :name
 
-# t = Test.new
-# t.name = "банан"
-# t.valid?
-# t2 = Test.new
-# t2.name = "banana"
-# t2.valid?
+  validate :name, :presence
+  validate :name, :format, NAME_FORMAT
+end
+
+t = Test.new
+t.name = "банан"
+t.valid?
+t2 = Test.new
+t2.name = "banana"
+t2.valid?
